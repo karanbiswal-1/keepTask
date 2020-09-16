@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_title"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="enter title"/>
+
+
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/ll_dynamic"
+       android:orientation="vertical"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_addList"
+        android:background="#F3EBEB"
+        android:clickable="true"
+        android:onClick="onAddListItem"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ic_addList"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:adjustViewBounds="true"
+            android:maxHeight="30dp"
+            android:maxWidth="30dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_add"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_addList"
+            android:layout_gravity="center_vertical"
+            android:textSize="24sp"
+            android:paddingRight="30dp"
+            android:gravity="center"
+            android:text="click to add items"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_adddata"
+        android:onClick="adddata"
+        android:text="ADD DATA"
+        android:layout_margin="20dp"/>
+
+</LinearLayout>
