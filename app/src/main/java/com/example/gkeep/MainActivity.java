@@ -2,6 +2,7 @@ package com.example.gkeep;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout mAddList;
     private Button mAdddata;
     private  int itemId;
+    private  Boolean isUpdate = false;
     private ArrayList<itemsValue> items;
     private DBhelper dBhelper;
+    private int updateID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +41,38 @@ public class MainActivity extends AppCompatActivity {
           mLinearLayout = findViewById(R.id.ll_dynamic);
           mAddList = findViewById(R.id.ll_addList);
           mAdddata = findViewById(R.id.btn_adddata);
+          mAdddata = findViewById(R.id.btn_adddata);
           items = new ArrayList<>();
 
           dBhelper = new DBhelper(MainActivity.this);
+
+          Bundle data = getIntent().getExtras();
+          if(data != null){
+                isUpdate  = data.getBoolean("is_update");
+               taskDetail taskdetail = (taskDetail) data.getSerializable("tasks");
+              // itemsValue itemsvalue = (itemsValue) data.getSerializable("items");
+               mItemtitle.setText(taskdetail.taskTitle);
+               updateID = taskdetail.taskId;
+               items = taskDetail.convertStringToList(taskdetail.taskValue);
+
+               for(final itemsValue newItems:items){
+                   itemId++;
+                   View newView = LayoutInflater.from(MainActivity.this).inflate(R.layout.cell_insert_data,null);
+                   final EditText mNewlistitem = newView.findViewById(R.id.et_newitem);
+                   final ImageView mIvdone = newView.findViewById(R.id.iv_done);
+                   mNewlistitem.setText(newItems.itemName);
+                    mIvdone.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                         newItems.itemName = mNewlistitem.getText().toString();
+                         mIvdone.setVisibility(View.GONE);
+                        }
+                    });
+
+                   mLinearLayout.addView(newView);
+               }
+               mAdddata.setText("update");
+          }
     }
 
     public void onAddListItem(View view){
@@ -50,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
         mAdddata.setAlpha(0.5f);
 
         View newView = LayoutInflater.from(MainActivity.this).inflate(R.layout.cell_insert_data,null);
-        CheckBox ch = newView.findViewById(R.id.ch_insert);
         final EditText mNewlistitem = newView.findViewById(R.id.et_newitem);
         final ImageView mIvdone = newView.findViewById(R.id.iv_done);
         mIvdone.setVisibility(View.GONE);
@@ -95,24 +127,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void  adddata(View view) {
         String itemsTitle = mItemtitle.getText().toString();
-        String itemArray = null;
-        if (items.size() > 0) {
-            JSONArray itemsArray = new JSONArray();
-            for (itemsValue itemvalue : items) {
-                try {
-                    JSONObject itemsObject = new JSONObject();
-                    itemsObject.put("itemID", itemvalue.itemID);
-                    itemsObject.put("itemName", itemvalue.itemName);
-                    itemsObject.put("isChecked", itemvalue.isChecked);
-                    itemsArray.put(itemsObject);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            itemArray = itemsArray.toString();
+        if(itemsTitle.isEmpty() || items.size()==0){
+            Toast.makeText(MainActivity.this,"title or list is empty",Toast.LENGTH_LONG).show();
+            return;
         }
-        dBhelper.insertDataToDatabase(dBhelper.getWritableDatabase(), itemsTitle, itemArray);
-        mItemtitle.setText("");
-        mLinearLayout.removeAllViews();
+        String itemArray = null;
+        itemArray = taskDetail.convertItemListTOString(items);
+
+        if(isUpdate){
+            dBhelper.updateDataToDatabase(dBhelper.getWritableDatabase(),itemsTitle,itemArray,updateID);
+
+        }else {
+            dBhelper.insertDataToDatabase(dBhelper.getWritableDatabase(), itemsTitle, itemArray);
+
+        }
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 }

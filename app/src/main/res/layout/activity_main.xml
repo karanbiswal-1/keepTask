@@ -14,7 +14,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:hint="enter title"/>
+        android:hint="Enter task title"/>
 
 
 
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ll_addList"
-        android:background="#F3EBEB"
+        android:background="#EBF6F5"
         android:clickable="true"
         android:onClick="onAddListItem"
         android:layout_marginLeft="10dp"
@@ -55,9 +55,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_addList"
             android:layout_gravity="center_vertical"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:paddingRight="30dp"
-            android:gravity="center"
+            android:layout_marginLeft="5dp"
             android:text="click to add items"/>
 
     </LinearLayout>
@@ -68,6 +68,7 @@
         android:id="@+id/btn_adddata"
         android:onClick="adddata"
         android:text="ADD DATA"
+        android:shadowColor="@color/colorAccent"
         android:layout_margin="20dp"/>
 
 </LinearLayout>
